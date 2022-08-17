@@ -5,8 +5,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,31 +36,32 @@ public class App {
         filmes.stream().collect(Collectors.groupingBy(Filme::getAno)).forEach((ano, listaFilmes) -> {
             listaFilmes.sort((Comparator.comparing(Filme::getNota).reversed()));
 
-            String filmesAno = listaFilmes.stream()
+            List<String> filmesAnot = new ArrayList<>();
+
+            listaFilmes.stream()
                     .limit(50)
-                    .map(Filme::toString)
-                    .reduce((f1, f2) -> f1 + "\n" + f2).get();
+                    .forEach(filme -> filmesAnot.add(filme.toString()));
 
             try {
                 Path anoPath = Path.of(ano + ".txt");
-                Files.write(anoPath, filmesAno.getBytes());
+                Files.write(anoPath, filmesAnot, StandardCharsets.UTF_8);
             } catch (Exception e) {
             }
         });
     }
 
     private static void getTop20Horror(Set<Filme> filmes) {
-        String top20 = filmes.stream()
+        List<String> top20teste = new ArrayList<>();
+
+        filmes.stream()
                 .filter(filme -> filme.getGeneros().contains(Genero.HORROR))
                 .sorted(Comparator.comparing(Filme::getNota).reversed())
                 .limit(20)
-                .map(Filme::toString)
-                .reduce((f1, f2) -> f1 + "\n" + f2).get();
-        System.out.println("Top 20: ");
+                .forEach(filme -> top20teste.add(filme.toString()));
 
         try {
             Path top20Horror = Path.of("top20Horror.txt");
-            Files.write(top20Horror, top20.getBytes());
+            Files.write(top20Horror, top20teste, StandardCharsets.UTF_8);
         } catch (Exception e) {
         }
 
