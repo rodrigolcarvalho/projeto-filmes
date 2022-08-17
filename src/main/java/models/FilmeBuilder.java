@@ -10,7 +10,7 @@ import models.parsers.MetadataParser;
 
 public class FilmeBuilder {
 
-    private static List<MetadataParser> parsers = List.of(
+    private static List<MetadataParser<?>> parsers = List.of(
         new MetadataParser<Integer>(CSVParser.INTEGER, Filme::setRank),
         new MetadataParser<String>(CSVParser.STRING, Filme::setTitulo),
         new MetadataParser<List<Genero>>(CSVParser.GENERO_LISTA, Filme::setGeneros),
