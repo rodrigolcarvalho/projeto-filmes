@@ -44,7 +44,6 @@ public class App {
 
         try {
             File top20Horror = new File("top20Horror.txt");
-            top20Horror.setWritable(true);
             FileOutputStream out = new FileOutputStream(top20Horror);
             Writer osw = new OutputStreamWriter(out);
             BufferedWriter bw = new BufferedWriter(osw);
