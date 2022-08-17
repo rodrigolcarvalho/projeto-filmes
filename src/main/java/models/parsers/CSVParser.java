@@ -30,10 +30,17 @@ public interface CSVParser<T> {
         return generos.map(genero -> Enum.valueOf(Genero.class, genero))
                     .collect(Collectors.toList());
     };
-    public static final CSVParser<Diretor> DIRETOR = metadado -> null; 
+    public static final CSVParser<Diretor> DIRETOR = Diretor::new; 
     public static final CSVParser<Year> YEAR = metadado -> Year.of(INTEGER.parse(metadado)); 
     public static final CSVParser<Duration> DURATION = metadado -> Duration.ofMinutes(INTEGER.parse(metadado));  
-    public static final CSVParser<List<Ator>> ATOR_LISTA = metadado -> null;
+    public static final CSVParser<List<Ator>> ATOR_LISTA = metadado -> {
+        metadado = metadado.replaceAll("\"", " ");
+        metadado = metadado.replaceAll("-", "_");
+        metadado = metadado.toUpperCase().trim();
+        Stream<String> atores = Arrays.stream(metadado.split(","));
+
+        return atores.map(Ator::new).collect(Collectors.toList());
+    };
 
     T parse(String metadado);
 }
