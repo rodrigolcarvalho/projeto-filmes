@@ -2,20 +2,27 @@ package com.filmes;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import lombok.ToString;
 import models.Filme;
 import models.FilmeBuilder;
 import models.Genero;
@@ -26,7 +33,7 @@ public class App {
     private static final String REGEX = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
 
     public static void main(String[] args) throws IOException {
-        List<Filme> filmes = CarregarFilmes("resources/movies-csv/movies3.csv", false);
+        Set<Filme> filmes = CarregarFilmes("resources/movies-csv/movies3.csv", false);
         filmes.addAll(CarregarFilmes("resources/movies-csv/movies2.csv", false));
         filmes.addAll(CarregarFilmes("resources/movies-csv/movies1.csv", true));
 
@@ -34,37 +41,26 @@ public class App {
 
     }
 
-    private static void getTop20Horror(List<Filme> filmes) {
-        List<Filme> top20 = filmes.stream()
+    private static void getTop20Horror(Set<Filme> filmes) {
+        String top20 = filmes.stream()
                         .filter(filme -> filme.getGeneros().contains(Genero.HORROR))
                         .sorted(Comparator.comparing(filme -> filme.getRank()))
                         .limit(20)
-                        .collect(Collectors.toList());
+                        .map(Filme::toString)
+                        .reduce((f1,f2)->f1+"\n"+f2).get();
         System.out.println("Top 20: ");
 
         try {
-            File top20Horror = new File("top20Horror.txt");
-            FileOutputStream out = new FileOutputStream(top20Horror);
-            Writer osw = new OutputStreamWriter(out);
-            BufferedWriter bw = new BufferedWriter(osw);
-           
-            top20.forEach(filme -> {
-                try {
-                    bw.write(filme.toString() + "\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            bw.close();
-
+            Path top20Horror = Path.of("top20Horror.txt");
+            Files.write(top20Horror, top20.getBytes());                
         } catch (Exception e) {
         }
-        top20.forEach(System.out::println);
+
     }
 
-    private static List<Filme> CarregarFilmes(String path, Boolean skipHeader) {
+    private static Set<Filme> CarregarFilmes(String path, Boolean skipHeader) {
         Path arquivoFilmes = Paths.get(path);
-        List<Filme> filmes = new ArrayList<>();
+        Set<Filme> filmes = new HashSet<>();
 
         if(!Files.exists(arquivoFilmes))
             return null;

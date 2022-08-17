@@ -223,7 +223,7 @@ public class Filme {
             ", diretor='" + getDiretor() + "'" +
             ", atores='" + getAtores() + "'" +
             ", ano='" + getAno() + "'" +
-            ", duracao='" + getDuracao() + "'" +
+            ", duracao='" + getDuracao().toMinutes() + "'" +
             ", nota='" + getNota() + "'" +
             ", votos='" + getVotos() + "'" +
             ", redimento='" + getRedimento() + "'" +
