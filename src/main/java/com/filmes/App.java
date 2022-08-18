@@ -5,6 +5,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -25,10 +29,25 @@ public class App {
         Set<Filme> filmes = CarregarFilmes("resources/movies-csv/movies3.csv", false);
         filmes.addAll(CarregarFilmes("resources/movies-csv/movies2.csv", false));
         filmes.addAll(CarregarFilmes("resources/movies-csv/movies1.csv", true));
-
+        
+        final DateTimeFormatter formatoCustomizado = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss.SSS");
+        LocalDateTime inicioProcessamento = LocalDateTime.now();
+        
+        System.out.println("Início do processamento: " + inicioProcessamento.format(formatoCustomizado));
+        
+        System.out.println("Gerando arquivo top20Horror...");
         getTop20Horror(filmes);
-
+        
+        System.out.println("Gerando arquivos de filmes por ano...");
         getTop50porAno(filmes);
+        
+        LocalDateTime fimProcessamento = LocalDateTime.now();
+        System.out.println("Fim do processamento: " + fimProcessamento.format(formatoCustomizado));
+
+        long duracaoMillis = inicioProcessamento.until(fimProcessamento, ChronoUnit.MILLIS);
+        // long duracaoSec= inicioProcessamento.until(fimProcessamento, ChronoUnit.SECONDS);
+        System.out.println("Tempo em milisegundos: " + duracaoMillis + " milisegundos");
+        System.out.println("Tempo em segundos: " + (duracaoMillis/1000.0) + " segundo");
 
     }
 
