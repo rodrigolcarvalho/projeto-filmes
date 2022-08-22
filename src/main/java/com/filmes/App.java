@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -18,6 +17,9 @@ import java.util.Set;
 import java.io.File;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 
 import models.Filme;
 import models.FilmeBuilder;
@@ -53,6 +55,18 @@ public class App {
         System.out.println("Tempo em milisegundos: " + duracaoMillis + " milisegundos");
         System.out.println("Tempo em segundos: " + (duracaoMillis/1000.0) + " segundo");
         tempoProcessamento(inicioProcessamento,fimProcessamento,duracaoMillis);
+
+        
+        // Conexõ com o Banco de Dados
+        EntityManager em = Persistence.createEntityManagerFactory("projetoFilmes").createEntityManager();
+        em.getTransaction().begin();
+
+        filmes.stream().forEach(filme -> em.persist(filme.getDiretor()));
+        filmes.stream().forEach(filme -> em.persist(filme.getAtores().get(0)));
+        em.persist(filmes.toArray()[0]);
+        
+        em.getTransaction().commit();
+
     }
 
     private static void getTop50porAno(Set<Filme> filmes) {

@@ -9,14 +9,14 @@
 		<!-- Para testar com console é só abrir o .jar do H2 e selecionar o caminho completo sem a extensão no JDBC URL assim jdbc:h2:file:{path} -->
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-			<property name="javax.persistence.jdbc.url" value="jdbc:h2:file:.\resources\database\projetoFilmes;mv_store=false;"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:file:.\resources\database\projetoFilmes;mv_store=true;"/>
 			<property name="javax.persistence.jdbc.user" value="sa"/>
 			<property name="javax.persistence.jdbc.password" value=""/>
 		
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.show_sql" value="false"/>
 			<property name="hibernate.format_sql" value="true"/>
-			<property name="hibernate.hbm2ddl.auto" value="update"/> <!-- create, update, create-drop, validate -->
+			<property name="hibernate.hbm2ddl.auto" value="create-drop"/> <!-- create, update, create-drop, validate -->
 		</properties>
 	</persistence-unit>
 	

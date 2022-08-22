@@ -2,11 +2,22 @@ package models;
 
 import java.util.Objects;
 
-public class Diretor {
-    private String nome;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-    public Diretor() {
-    }
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@NoArgsConstructor
+@Data
+public class Diretor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nome;
 
     public Diretor(String nome) {
         this.nome = nome;
@@ -47,5 +58,4 @@ public class Diretor {
                 " nome='" + getNome() + "'" +
                 "}";
     }
-
 }

@@ -1,19 +1,43 @@
 package models;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.time.Duration;
 import java.time.Year;
 import java.util.List;
 import java.util.Objects;
 
-
 // @Getters
+@Entity
+@Table(name="filmes")
 public class Filme {
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Integer rank;
     private String titulo;
+    // @JoinTable(name = "filmes",
+    // joinColumns = @JoinColumn(name = "id"))
+    @ElementCollection(targetClass = Genero.class)
+    @Enumerated(EnumType.STRING)
     private List<Genero> generos;
     private String descricao;
+    @OneToOne
     private Diretor diretor;
+    @OneToMany(mappedBy = "filmeEstrelado", cascade = CascadeType.ALL)
     private List<Ator> atores;
     private Year ano;
     private Duration duracao;
@@ -221,7 +245,7 @@ public class Filme {
             ", generos='" + getGeneros() + "'" +
             ", descricao='" + getDescricao() + "'" +
             ", diretor='" + getDiretor() + "'" +
-            ", atores='" + getAtores() + "'" +
+            ", itemAtores='" + getAtores() + "'" +
             ", ano='" + getAno() + "'" +
             ", duracao='" + getDuracao().toMinutes() + "'" +
             ", nota='" + getNota() + "'" +
