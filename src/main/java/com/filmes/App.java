@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,7 +49,7 @@ public class App {
         // long duracaoSec= inicioProcessamento.until(fimProcessamento, ChronoUnit.SECONDS);
         System.out.println("Tempo em milisegundos: " + duracaoMillis + " milisegundos");
         System.out.println("Tempo em segundos: " + (duracaoMillis/1000.0) + " segundo");
-
+        tempoProcessamento(inicioProcessamento,fimProcessamento,duracaoMillis);
     }
 
     private static void getTop50porAno(Set<Filme> filmes) {
@@ -103,5 +104,19 @@ public class App {
         }
         return filmes;
 
+    }
+
+    private static void tempoProcessamento(LocalDateTime inicio, LocalDateTime fim,long duracaoMillis) {
+    	final DateTimeFormatter formatoCustomizado = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss.SSS");
+    	
+    	 try {
+             Path tempoProcessamento = Path.of("tempoDeProcessamento.txt");
+             Files.writeString(tempoProcessamento, "Incio processamento: "+inicio.format(formatoCustomizado)+"\n", StandardCharsets.UTF_8);
+             Files.writeString(tempoProcessamento, "Fim processamento: "+fim.format(formatoCustomizado)+"\n", StandardCharsets.UTF_8,StandardOpenOption.APPEND);
+             Files.writeString(tempoProcessamento, "Tempo em milisegundos: "+duracaoMillis +" milissegundos\n", StandardCharsets.UTF_8,StandardOpenOption.APPEND);
+             Files.writeString(tempoProcessamento, "Tempo em segundos: "+ (duracaoMillis/1000.00) + " segundos", StandardCharsets.UTF_8,StandardOpenOption.APPEND);
+    	 } catch (Exception e) {
+         }
+    
     }
 }
