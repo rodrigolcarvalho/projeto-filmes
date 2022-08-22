@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.io.File;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,12 +26,14 @@ import models.Genero;
 public class App {
 
     private static final String REGEX = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
+    private static final String DIRETORIO_ARQUIVO = "arquivosDeSaida";
+    private static File diretorio = new File(DIRETORIO_ARQUIVO);
 
     public static void main(String[] args) throws IOException {
         Set<Filme> filmes = CarregarFilmes("resources/movies-csv/movies3.csv", false);
         filmes.addAll(CarregarFilmes("resources/movies-csv/movies2.csv", false));
         filmes.addAll(CarregarFilmes("resources/movies-csv/movies1.csv", true));
-        
+        diretorio.mkdir();
         final DateTimeFormatter formatoCustomizado = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss.SSS");
         LocalDateTime inicioProcessamento = LocalDateTime.now();
         
@@ -63,7 +66,8 @@ public class App {
                     .forEach(filme -> filmesAnot.add(filme.toString()));
 
             try {
-                Path anoPath = Path.of(ano + ".txt");
+                //Path anoPath = Path.of(ano + ".txt");
+                Path anoPath = Path.of(DIRETORIO_ARQUIVO+"/"+ano + ".txt");
                 Files.write(anoPath, filmesAnot, StandardCharsets.UTF_8);
             } catch (Exception e) {
             }
@@ -80,7 +84,8 @@ public class App {
                 .forEach(filme -> top20teste.add(filme.toString()));
 
         try {
-            Path top20Horror = Path.of("top20Horror.txt");
+            //Path top20Horror = Path.of("top20Horror.txt");
+            Path top20Horror = Path.of(DIRETORIO_ARQUIVO+"/"+"top20Horror.txt");
             Files.write(top20Horror, top20teste, StandardCharsets.UTF_8);
         } catch (Exception e) {
         }
@@ -110,7 +115,8 @@ public class App {
     	final DateTimeFormatter formatoCustomizado = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss.SSS");
     	
     	 try {
-             Path tempoProcessamento = Path.of("tempoDeProcessamento.txt");
+             //Path tempoProcessamento = Path.of("tempoDeProcessamento.txt");
+             Path tempoProcessamento = Path.of(DIRETORIO_ARQUIVO+"/"+"tempoDeProcessamento.txt");
              Files.writeString(tempoProcessamento, "Incio processamento: "+inicio.format(formatoCustomizado)+"\n", StandardCharsets.UTF_8);
              Files.writeString(tempoProcessamento, "Fim processamento: "+fim.format(formatoCustomizado)+"\n", StandardCharsets.UTF_8,StandardOpenOption.APPEND);
              Files.writeString(tempoProcessamento, "Tempo em milisegundos: "+duracaoMillis +" milissegundos\n", StandardCharsets.UTF_8,StandardOpenOption.APPEND);
