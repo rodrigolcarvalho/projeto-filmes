@@ -1,0 +1,4 @@
+Incio processamento: 22/08/2022 08:43:22.926
+Fim processamento: 22/08/2022 08:43:23.023
+Tempo em milisegundos: 97 milissegundos
+Tempo em segundos: 0.097 segundos
